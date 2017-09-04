@@ -1,2 +1,4 @@
 {
+  // "functions": [ "EventHubConsumer" ]
+  // "functions": [ "EventHubPublisher" ]
 }
