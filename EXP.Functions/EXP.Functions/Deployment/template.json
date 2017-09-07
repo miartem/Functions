@@ -45,7 +45,9 @@
         "storageAccountName": "[parameters('storageAccountName')]",
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
         "eventHubNamespace": "[parameters('eventHubNamespace')]",
-        "eventHubName": "[parameters('eventHubName')]"
+        "eventHubName": "[parameters('eventHubName')]",
+        "eventHubManageRuleName": "Manage",        
+        "eventHubManageRuleId": "[concat(resourceGroup().id,'/providers/','Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubManageRuleName'))]"
     },
     "resources": [
         {
@@ -55,22 +57,32 @@
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Basic",
-                "tier": "Basic",
-                "capacity": 1
-            },
-            "resources": [
-                {
-                    "type": "eventhubs",
-                    "name": "[variables('eventHubName')]",
-                    "apiVersion": "2015-08-01",
-                    "dependsOn": [
-                        "[concat('Microsoft.EventHub/namespaces/', variables('eventHubNamespace'))]"
-                    ],
-                    "properties": {
-                        "path": "[parameters('eventHubName')]"
-                    }
-                }
-            ]
+                "tier": "Basic"
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "name": "[variables('eventHubName')]",
+            "apiVersion": "2015-08-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubNamespace'))]"
+            ],
+            "properties": {
+                "path": "[parameters('eventHubName')]"
+            }
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
+            "name": "[variables('eventHubManageRuleName')]",
+            "apiVersion": "2017-03-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubNamespace'), variables('eventHubName'))]"
+            ],
+            "properties": {                
+                "Rights": [ "Manage", "Send", "Receive" ]
+            }
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
@@ -102,7 +114,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubName'))]"
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubNamespace'), variables('eventHubName'))]"
             ],
             "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
@@ -135,6 +147,14 @@
                         {
                             "name": "WEBSITE_NODE_DEFAULT_VERSION",
                             "value": "6.5.0"
+                        },
+                        {
+                            "name": "EventHubName",
+                            "value": "[variables('eventHubName')]"
+                        },
+                        {
+                            "name": "EventHubConnection",
+                            "value": "[listkeys(variables('eventHubManageRuleId'), '2015-05-01-preview')).primaryConnectionString]"
                         }
                     ]
                 }
