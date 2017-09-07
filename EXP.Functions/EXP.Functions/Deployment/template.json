@@ -48,43 +48,41 @@
         "hostingPlanName": "[parameters('appName')]",
         "storageAccountName": "[parameters('storageAccountName')]",
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-        "eventHubNamespace": "[parameters('eventHubNamespace')]",
-        "eventHubName": "[parameters('eventHubName')]",
-        "eventHubManageRuleName": "Manage",        
-        "eventHubManageRuleId": "[concat(resourceGroup().id,'/providers/','Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubManageRuleName'))]"
+        "eventHubId": "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventHubNamespace'), parameters('eventHubName'))]",
+        "eventHubManageRuleName": "Manage",
+        "eventHubManageRuleId": "[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventHubNamespace'), parameters('eventHubName'), variables('eventHubManageRuleName'))]"
     },
     "resources": [
         {
             "type": "Microsoft.EventHub/namespaces",
-            "name": "[variables('eventHubNamespace')]",
-            "apiVersion": "2015-08-01",
+            "name": "[parameters('eventHubNamespace')]",
+            "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "sku": {
-                "name": "Basic",
-                "tier": "Basic"
+                "name": "Basic"
             }
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs",
-            "name": "[concat(variables('eventHubNamespace'), '/', variables('eventHubName'))]",
-            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('eventHubNamespace'), '/', parameters('eventHubName'))]",
+            "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubNamespace'))]"
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventHubNamespace'))]"
             ],
             "properties": {
                 "path": "[parameters('eventHubName')]",
                 "messageRetentionInDays": 1,
                 "partitionCount": 3
-            }            
+            }
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
-            "name": "[concat(variables('eventHubNamespace'), '/', variables('eventHubName'), '/', variables('eventHubManageRuleName'))]",
-            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('eventHubNamespace'), '/', parameters('eventHubName'), '/', variables('eventHubManageRuleName'))]",
+            "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubNamespace'), variables('eventHubName'))]"
+                "[variables('eventHubId')]"
             ],
             "properties": {
                 "rights": [ "Manage", "Send", "Listen" ]
@@ -103,7 +101,7 @@
         {
             "type": "Microsoft.Web/serverfarms",
             "name": "[variables('hostingPlanName')]",
-            "apiVersion": "2016-09-01",
+            "apiVersion": "2015-04-01",
             "location": "[resourceGroup().location]",
             "properties": {
                 "name": "[variables('hostingPlanName')]",
@@ -120,30 +118,26 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubNamespace'), variables('eventHubName'))]",
-                "[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubNamespace'), variables('eventHubName'), variables('eventHubManageRuleName'))]"
+                "[variables('eventHubId')]",
+                "[variables('eventHubManageRuleId')]"
             ],
             "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 "siteConfig": {
                     "appSettings": [
                         {
-                            // AzureWebJobsDashboard is used to log to Azure Table storage and power the Monitor tab in the portal.
                             "name": "AzureWebJobsDashboard",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
                         },
                         {
-                            // The Azure Functions runtime uses the AzureWebJobsStorage connection string to create internal queues.
                             "name": "AzureWebJobsStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
                         },
                         {
-                            // Storage account connection string where the function app code and configuration are stored.
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
                         },
                         {
-                            // Storage account file path where the function app code and configuration are stored
                             "name": "WEBSITE_CONTENTSHARE",
                             "value": "[toLower(variables('functionAppName'))]"
                         },
@@ -157,11 +151,11 @@
                         },
                         {
                             "name": "EventHubName",
-                            "value": "[variables('eventHubName')]"
+                            "value": "[parameters('eventHubName')]"
                         },
                         {
                             "name": "EventHubConnection",
-                            "value": "[listkeys(variables('eventHubManageRuleId'), '2015-08-01').primaryConnectionString]"
+                            "value": "[listkeys(variables('eventHubManageRuleId'), '2017-04-01').primaryConnectionString]"
                         }
                     ]
                 }
