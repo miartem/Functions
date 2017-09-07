@@ -73,8 +73,10 @@
                 "[resourceId('Microsoft.EventHub/namespaces', variables('eventHubNamespace'))]"
             ],
             "properties": {
-                "path": "[parameters('eventHubName')]"
-            }
+                "path": "[parameters('eventHubName')]",
+                "messageRetentionInDays": 1,
+                "partitionCount": 3
+            }            
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
@@ -85,7 +87,7 @@
                 "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubNamespace'), variables('eventHubName'))]"
             ],
             "properties": {
-                "Rights": [ "Manage", "Send", "Receive" ]
+                "rights": [ "Manage", "Send", "Listen" ]
             }
         },
         {
