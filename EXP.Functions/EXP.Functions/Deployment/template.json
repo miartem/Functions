@@ -79,7 +79,7 @@
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
             "name": "[concat(variables('eventHubNamespace'), '/', variables('eventHubName'), '/', variables('eventHubManageRuleName'))]",
-            "apiVersion": "2017-03-01",
+            "apiVersion": "2015-08-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubNamespace'), variables('eventHubName'))]"
