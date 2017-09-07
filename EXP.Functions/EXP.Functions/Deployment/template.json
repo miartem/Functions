@@ -100,8 +100,8 @@
         },
         {
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2016-09-01",
             "name": "[variables('hostingPlanName')]",
+            "apiVersion": "2016-09-01",
             "location": "[resourceGroup().location]",
             "properties": {
                 "name": "[variables('hostingPlanName')]",
@@ -110,9 +110,9 @@
             }
         },
         {
-            "apiVersion": "2016-08-01",
             "type": "Microsoft.Web/sites",
             "name": "[variables('functionAppName')]",
+            "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
             "kind": "functionapp",
             "dependsOn": [
@@ -159,7 +159,7 @@
                         },
                         {
                             "name": "EventHubConnection",
-                            "value": "[listkeys(variables('eventHubManageRuleId'), '2015-05-01-preview')).primaryConnectionString]"
+                            "value": "[listkeys(variables('eventHubManageRuleId'), '2015-08-01').primaryConnectionString]"
                         }
                     ]
                 }
