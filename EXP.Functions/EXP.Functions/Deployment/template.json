@@ -4,6 +4,7 @@
     "parameters": {
         "appName": {
             "type": "string",
+            "defaultValue": "[resourceGroup().name]",
             "metadata": {
                 "description": "The name of the function app that you wish to create."
             }
@@ -22,18 +23,21 @@
         },
         "storageAccountName": {
             "type": "string",
+            "defaultValue": "[replace(resourceGroup().name, '-', '')]",
             "metadata": {
                 "description": "Storage Account name"
             }
         },
         "eventHubNamespace": {
             "type": "string",
+            "defaultValue": "[resourceGroup().name]",
             "metadata": {
                 "description": "Event Hub namespace"
             }
         },
         "eventHubName": {
             "type": "string",
+            "defaultValue": "[resourceGroup().name]",
             "metadata": {
                 "description": "Event Hub name"
             }
@@ -78,7 +82,7 @@
             "apiVersion": "2017-03-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubName'))]"
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubNamespace'), variables('eventHubName'))]"
             ],
             "properties": {
                 "Rights": [ "Manage", "Send", "Receive" ]
@@ -114,8 +118,8 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubName'))]",
-                "[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubManageRuleName'))]"
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubNamespace'), variables('eventHubName'))]",
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubNamespace'), variables('eventHubName'), variables('eventHubManageRuleName'))]"
             ],
             "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
