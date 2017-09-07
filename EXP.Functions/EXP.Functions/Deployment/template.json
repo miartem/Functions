@@ -62,7 +62,7 @@
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs",
-            "name": "[variables('eventHubName')]",
+            "name": "[concat(variables('eventHubNamespace'), '/', variables('eventHubName'))]",
             "apiVersion": "2015-08-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
@@ -74,13 +74,13 @@
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
-            "name": "[variables('eventHubManageRuleName')]",
+            "name": "[concat(variables('eventHubNamespace'), '/', variables('eventHubName'), '/', variables('eventHubManageRuleName'))]",
             "apiVersion": "2017-03-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubName'))]"
             ],
-            "properties": {                
+            "properties": {
                 "Rights": [ "Manage", "Send", "Receive" ]
             }
         },
@@ -114,7 +114,8 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubName'))]"
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventHubName'))]",
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', variables('eventHubManageRuleName'))]"
             ],
             "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
