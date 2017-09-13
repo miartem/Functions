@@ -43,14 +43,15 @@
             }
         }
     },
-    "variables": {
-        "functionAppName": "[parameters('appName')]",
+    "variables": {        
         "hostingPlanName": "[parameters('appName')]",
         "storageAccountName": "[parameters('storageAccountName')]",
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
         "eventHubId": "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventHubNamespace'), parameters('eventHubName'))]",
         "eventHubManageRuleName": "Manage",
-        "eventHubManageRuleId": "[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventHubNamespace'), parameters('eventHubName'), variables('eventHubManageRuleName'))]"
+        "eventHubManageRuleId": "[resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventHubNamespace'), parameters('eventHubName'), variables('eventHubManageRuleName'))]",
+        "appInsightsName": "[parameters('appName')]",
+        "appInsightsId": "[resourceId('Microsoft.Insights/components', parameters('appName'))]"
     },
     "resources": [
         {
@@ -111,7 +112,7 @@
         },
         {
             "type": "Microsoft.Web/sites",
-            "name": "[variables('functionAppName')]",
+            "name": "[parameters('appName')]",
             "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
             "kind": "functionapp",
@@ -119,7 +120,8 @@
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
                 "[variables('eventHubId')]",
-                "[variables('eventHubManageRuleId')]"
+                "[variables('eventHubManageRuleId')]",
+                "[variables('appInsightsId')]"
             ],
             "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
@@ -139,7 +141,11 @@
                         },
                         {
                             "name": "WEBSITE_CONTENTSHARE",
-                            "value": "[toLower(variables('functionAppName'))]"
+                            "value": "[toLower(parameters('appName'))]"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY ",
+                            "value": "[listkeys(variables('appInsightsId'), '2015-08-01').InstrumentationKey]"
                         },
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -155,10 +161,23 @@
                         },
                         {
                             "name": "EventHubConnection",
-                            "value": "[listkeys(variables('eventHubManageRuleId'), '2017-04-01').primaryConnectionString]"
+                            "value": "[listkeys(variables('eventHubManageRuleId'), '2015-05-01-preview').primaryConnectionString]"
                         }
                     ]
                 }
+            }
+        },
+        {
+            "type": "Microsoft.Insights/components",
+            "name": "[parameters('appName')]",
+            "apiVersion": "2017-04-01",
+            "location": "[resourceGroup().location]",            
+            "tags": {
+                "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('appName'))]": "Resource",
+                "displayName": "AppInsightsComponent"
+            },
+            "properties": {
+                "applicationId": "[parameters('appName')]"
             }
         }
     ]
