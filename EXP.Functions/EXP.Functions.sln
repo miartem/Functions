@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EXP.Functions", "EXP.Functions\EXP.Functions.csproj", "{05BF936A-368B-40B2-BDD6-3F369CDE4ED5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EXP.Functions.EventHub", "EXP.Functions.EventHub\EXP.Functions.EventHub.csproj", "{05BF936A-368B-40B2-BDD6-3F369CDE4ED5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EXP.Functions.ImageResizer", "EXP.Functions.ImageResizer\EXP.Functions.ImageResizer.csproj", "{DBF182F6-C14D-41FF-9AA6-F68DCE24450D}"
 EndProject
