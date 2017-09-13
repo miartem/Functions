@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EXP.Functions", "EXP.Functions\EXP.Functions.csproj", "{05BF936A-368B-40B2-BDD6-3F369CDE4ED5}"
 EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "EXP.Functions.Deployment", "EXP.Functions.Deployment\EXP.Functions.Deployment.deployproj", "{BD69E074-2DF1-4BA1-970C-EBD0586004DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EXP.Functions.ImageResizer", "EXP.Functions.ImageResizer\EXP.Functions.ImageResizer.csproj", "{DBF182F6-C14D-41FF-9AA6-F68DCE24450D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{05BF936A-368B-40B2-BDD6-3F369CDE4ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05BF936A-368B-40B2-BDD6-3F369CDE4ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05BF936A-368B-40B2-BDD6-3F369CDE4ED5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD69E074-2DF1-4BA1-970C-EBD0586004DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD69E074-2DF1-4BA1-970C-EBD0586004DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD69E074-2DF1-4BA1-970C-EBD0586004DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD69E074-2DF1-4BA1-970C-EBD0586004DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBF182F6-C14D-41FF-9AA6-F68DCE24450D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBF182F6-C14D-41FF-9AA6-F68DCE24450D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBF182F6-C14D-41FF-9AA6-F68DCE24450D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBF182F6-C14D-41FF-9AA6-F68DCE24450D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
