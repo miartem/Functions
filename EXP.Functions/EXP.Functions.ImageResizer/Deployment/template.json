@@ -9,6 +9,13 @@
                 "description": "The name of the function app that you wish to create."
             }
         },
+        "hostingPlanName": {
+            "type": "string",
+            "defaultValue": "[parameters('appName')]",
+            "metadata": {
+                "description": "Hosting plan name"
+            }
+        },
         "storageAccountType": {
             "type": "string",
             "defaultValue": "Standard_LRS",
@@ -30,16 +37,13 @@
         }
     },
     "variables": {        
-        "hostingPlanName": "[parameters('appName')]",
-        "storageAccountName": "[parameters('storageAccountName')]",
-        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-        "appInsightsName": "[parameters('appName')]",
+        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
         "appInsightsId": "[resourceId('Microsoft.Insights/components', parameters('appName'))]"
     },
     "resources": [        
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "name": "[variables('storageAccountName')]",
+            "name": "[parameters('storageAccountName')]",
             "apiVersion": "2016-01-01",
             "location": "[resourceGroup().location]",
             "kind": "Storage",
@@ -49,11 +53,11 @@
         },
         {
             "type": "Microsoft.Web/serverfarms",
-            "name": "[variables('hostingPlanName')]",
+            "name": "[parameters('hostingPlanName')]",
             "apiVersion": "2015-04-01",
             "location": "[resourceGroup().location]",
             "properties": {
-                "name": "[variables('hostingPlanName')]",
+                "name": "[parameters('hostingPlanName')]",
                 "computeMode": "Dynamic",
                 "sku": "Dynamic"
             }
@@ -65,25 +69,25 @@
             "location": "[resourceGroup().location]",
             "kind": "functionapp",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
                 "[variables('appInsightsId')]"
             ],
             "properties": {
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]",
                 "siteConfig": {
                     "appSettings": [
                         {
                             "name": "AzureWebJobsDashboard",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
                         },
                         {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
                         },
                         {
                             "name": "WEBSITE_CONTENTSHARE",
@@ -91,7 +95,7 @@
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY ",
-                            "value": "[listkeys(variables('appInsightsId'), '2015-08-01').InstrumentationKey]"
+                            "value": "[reference(variables('appInsightsId')).InstrumentationKey]"
                         },
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -103,15 +107,15 @@
                         },
                         {
                             "name": "IMAGE_BLOB_CONNECTION",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
                         },
                         {
                             "name": "IMAGE_SMALL_BLOB_CONNECTION",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
                         },
                         {
                             "name": "IMAGE_MEDIUM_BLOB_CONNECTION",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
                         }
                     ]
                 }
@@ -120,7 +124,7 @@
         {
             "type": "Microsoft.Insights/components",
             "name": "[parameters('appName')]",
-            "apiVersion": "2017-04-01",
+            "apiVersion": "2015-05-01",
             "location": "[resourceGroup().location]",
             "tags": {
                 "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('appName'))]": "Resource",

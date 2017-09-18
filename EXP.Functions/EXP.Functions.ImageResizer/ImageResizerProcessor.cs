@@ -14,7 +14,7 @@ namespace EXP.Functions.ImageResizerProcessor
             [Blob("images-small/{name}", FileAccess.Write, Connection = "IMAGE_SMALL_BLOB_CONNECTION")]Stream imageSmall,
             [Blob("images-medium/{name}", FileAccess.Write, Connection = "IMAGE_MEDIUM_BLOB_CONNECTION")]Stream imageMedium)  // output blobs
         {
-            var imageBuilder = ImageResizer.ImageBuilder.Current;
+            var imageBuilder = ImageBuilder.Current;
 
             var size = imageDimensionsTable[ImageSize.Small];
             imageBuilder.Build(image, imageSmall, new ResizeSettings(size.Item1, size.Item2, FitMode.Max, null), false);
