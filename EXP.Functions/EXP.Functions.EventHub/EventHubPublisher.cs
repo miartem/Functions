@@ -11,7 +11,7 @@ namespace EXP.Functions
     public static class EventHubPublisher
     {
         [FunctionName("EventHubPublisher")]
-        public static void Run([TimerTrigger("*/2 * * * * *")] TimerInfo myTimer, [EventHub("%EventHubName%", Connection = "EventHubConnection")] out EventData eventData, TraceWriter log)
+        public static void Run([TimerTrigger("*/5 * * * * *")] TimerInfo myTimer, [EventHub("%EventHubName%", Connection = "EventHubConnection")] out EventData eventData, TraceWriter log)
         {
             string message = $"Current time is: {DateTime.Now}";
             eventData = new EventData(Encoding.UTF8.GetBytes(message))
