@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /EXP.Functions/EXP.Functions.Deployment
+/EXP.Functions/EXP.Functions.ImageResizer/Properties/PublishProfiles
