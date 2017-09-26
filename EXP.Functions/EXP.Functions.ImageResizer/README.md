@@ -1,1 +1,2 @@
-﻿[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
+﻿# Deployment
+[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmiartem%2FFunctions%2Fmaster%2FEXP.Functions%2FEXP.Functions.ImageResizer%2Fazuredeploy.json)
