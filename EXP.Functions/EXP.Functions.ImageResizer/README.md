@@ -3,12 +3,12 @@
 
 <div>
 	<div>Custom deployment initiated</div>
-	<img src="Deployment%2FDocumentation%2FCustom%20deployment.PNG" width="500" title="Github Logo">
+	<img src="Deployment%2FDocumentation%2FCustom%20deployment.PNG" width="600" title="Github Logo">
 	</p>
 </div>
 <div>
 	<div>Resource group created</div>
-	<img src="Deployment%2FDocumentation%2FResource%20group.PNG" width="500" title="Github Logo">
+	<img src="Deployment%2FDocumentation%2FResource%20group.PNG" width="600" title="Github Logo">
 	</p>
 </div>
 
