@@ -11,7 +11,7 @@
         },
         "hostingPlanName": {
             "type": "string",
-            "defaultValue": "[parameters('appName')]",
+            "defaultValue": "[resourceGroup().name]",
             "metadata": {
                 "description": "Hosting plan name"
             }
