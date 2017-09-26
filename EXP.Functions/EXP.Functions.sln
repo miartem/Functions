@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EXP.Functions.EventHub", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EXP.Functions.ImageResizer", "EXP.Functions.ImageResizer\EXP.Functions.ImageResizer.csproj", "{DBF182F6-C14D-41FF-9AA6-F68DCE24450D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EXP.Functions.ScheduledTask", "EXP.Functions.ScheduledTask\EXP.Functions.ScheduledTask.csproj", "{0075092F-7CAC-4CAD-9865-96B483593FA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EXP.Functions.ScheduledTask", "EXP.Functions.ScheduledTask\EXP.Functions.ScheduledTask.csproj", "{0075092F-7CAC-4CAD-9865-96B483593FA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{6C6A4D4B-3A98-43B3-8C60-08D922BAB8E6}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
