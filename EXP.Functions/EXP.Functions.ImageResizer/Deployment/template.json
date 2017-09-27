@@ -152,7 +152,7 @@
         },
         {
             "type": "Microsoft.Web/sites/sourcecontrols",
-            "name": "[concat(parameters('appName'), '/', 'source')]",
+            "name": "[concat(parameters('appName'), '/', 'web')]",
             "apiVersion": "2015-08-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/Sites', parameters('appName'))]"
