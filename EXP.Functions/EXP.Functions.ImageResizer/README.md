@@ -13,7 +13,7 @@ Leverate Azure Functions to resize images uploaded to 'images' container.
    </div>
 3. <div>
 	<p>Wait for successful deployment</p>
-	<img src="Deployment%2FDocumentation%2FResource%20group.PNG" width="600" title="Github Logo">
+	<img src="Deployment%2FDocumentation%2FResources.PNG" width="600" title="Github Logo">
 	</p>
 </div>
 
