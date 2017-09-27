@@ -25,14 +25,26 @@
                 "Standard_RAGRS"
             ],
             "metadata": {
-                "description": "Storage Account type"
+                "description": "Storage account type"
             }
         },
         "storageAccountName": {
             "type": "string",
             "defaultValue": "[replace(resourceGroup().name, '-', '')]",
             "metadata": {
-                "description": "Storage Account name"
+                "description": "Storage account name"
+            }
+        },
+        "repositoryUrl": {
+            "type": "string",
+            "metadata": {
+                "description": "Source code repository URL"
+            }
+        },
+        "branch": {
+            "type": "string",
+            "metadata": {
+                "description": "Source code branch"
             }
         }
     },
@@ -40,7 +52,7 @@
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
         "appInsightsId": "[resourceId('Microsoft.Insights/components', parameters('appName'))]"
     },
-    "resources": [        
+    "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('storageAccountName')]",
@@ -116,6 +128,10 @@
                         {
                             "name": "IMAGE_MEDIUM_BLOB_CONNECTION",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "PROJECT",
+                            "value": "EXP.Functions/EXP.Functions.ImageResizer/EXP.Functions.ImageResizer.csproj"
                         }
                     ]
                 }
@@ -132,6 +148,20 @@
             },
             "properties": {
                 "applicationId": "[parameters('appName')]"
+            }
+        },
+        {
+
+            "type": "Microsoft.Web/sites/sourcecontrols",
+            "name": "web",
+            "apiVersion": "2015-08-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/Sites', parameters('appName'))]"
+            ],
+            "properties": {
+                "RepoUrl": "[parameters('repositoryURL')]",
+                "branch": "[parameters('branch')]",
+                "isManualIntegration": false
             }
         }
     ]
