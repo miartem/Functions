@@ -30,7 +30,7 @@
         },
         "storageAccountName": {
             "type": "string",
-            "defaultValue": "[replace(resourceGroup().name, '-', '')]",
+            "defaultValue": "[toLower(replace(resourceGroup().name, '-', ''))]",
             "metadata": {
                 "description": "Storage account name"
             }
