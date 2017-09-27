@@ -37,12 +37,14 @@
         },
         "repositoryUrl": {
             "type": "string",
+            "defaultValue": "https://github.com/miartem/Functions.git",
             "metadata": {
                 "description": "Source code repository URL"
             }
         },
         "branch": {
             "type": "string",
+            "defaultValue": "master",
             "metadata": {
                 "description": "Source code branch"
             }
